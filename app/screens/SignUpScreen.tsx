@@ -1,61 +1,65 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { getMasterPassword, saveMasterPassword, checkMasterPassword } from '../../utils/storage';
+import { saveMasterPassword } from '../../utils/storage';
 
-export default function LoginScreen() {
+export default function SignUpScreen() {
   const [password, setPassword] = useState('');
-  const [isFirstTime, setIsFirstTime] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
 
   useEffect(() => {
-    checkIfFirstTime();
-    
-    // Animate screen entrance
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 800,
+        duration: 600,
         useNativeDriver: true,
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
-        duration: 800,
+        duration: 600,
         useNativeDriver: true,
       }),
     ]).start();
   }, []);
 
-  const checkIfFirstTime = async () => {
-    const masterPassword = await getMasterPassword();
-    setIsFirstTime(!masterPassword);
-  };
-
-  const handleLogin = async () => {
-    if (!password) {
-      Alert.alert('Error', 'Please enter a password');
+  const handleSignUp = async () => {
+    if (!password || !confirmPassword) {
+      Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
-    if (isFirstTime) {
-      await saveMasterPassword(password);
-      Alert.alert('Success', 'Master password set successfully!');
-      navigation.navigate('Home');
-    } else {
-      const isValid = await checkMasterPassword(password);
-      if (isValid) {
-        navigation.navigate('Home');
-      } else {
-        Alert.alert('Error', 'Invalid password');
-      }
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
     }
-    setPassword('');
+
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters long');
+      return;
+    }
+
+    try {
+      await saveMasterPassword(password);
+      Alert.alert('Success', 'Account created successfully!', [
+        { text: 'OK', onPress: () => navigation.navigate('Home') }
+      ]);
+    } catch (error) {
+      Alert.alert('Error', 'Failed to create account');
+    }
   };
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity 
+        style={styles.backButton} 
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={styles.backButtonText}>← Back</Text>
+      </TouchableOpacity>
+
       <Animated.View 
         style={[
           styles.header,
@@ -66,10 +70,8 @@ export default function LoginScreen() {
         ]}
       >
         <Text style={styles.logoEmoji}>🔐</Text>
-        <Text style={styles.title}>Password Manager</Text>
-        <Text style={styles.subtitle}>
-          {isFirstTime ? 'Set your master password' : 'Enter your master password'}
-        </Text>
+        <Text style={styles.title}>Create Account</Text>
+        <Text style={styles.subtitle}>Set up your master password</Text>
       </Animated.View>
 
       <Animated.View 
@@ -89,21 +91,19 @@ export default function LoginScreen() {
           placeholderTextColor="#999"
           secureTextEntry
         />
-        
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>
-            {isFirstTime ? 'Set Password' : 'Login'}
-          </Text>
-        </TouchableOpacity>
 
-        {!isFirstTime && (
-          <TouchableOpacity 
-            style={styles.signUpButton} 
-            onPress={() => navigation.navigate('SignUp')}
-          >
-            <Text style={styles.signUpText}>Don't have an account? Sign Up</Text>
-          </TouchableOpacity>
-        )}
+        <TextInput
+          style={styles.input}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholder="Confirm Password"
+          placeholderTextColor="#999"
+          secureTextEntry
+        />
+        
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+          <Text style={styles.buttonText}>Create Account</Text>
+        </TouchableOpacity>
       </Animated.View>
     </View>
   );
@@ -114,6 +114,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 1,
+    padding: 10,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#4a90e2',
+    fontWeight: '600',
+  },
   header: {
     backgroundColor: '#4a90e2',
     paddingTop: 100,
@@ -121,6 +133,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+  },
+  logoEmoji: {
+    fontSize: 60,
+    marginBottom: 16,
+    textAlign: 'center',
   },
   title: {
     fontSize: 32,
@@ -158,18 +175,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
-  },
-  signUpButton: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  signUpText: {
-    color: '#4a90e2',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  logoEmoji: {
-    fontSize: 60,
-    marginBottom: 16,
   },
 });
