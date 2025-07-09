@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Clipboard } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { getAllPasswords, deletePasswordEntry, PasswordEntry } from '../../utils/storage';
 
@@ -34,12 +34,35 @@ export default function PasswordListScreen() {
     loadPasswords();
   };
 
+  const copyToClipboard = (text: string, type: 'username' | 'password') => {
+    Clipboard.setString(text);
+    Alert.alert('Copied!', `${type === 'username' ? 'Username' : 'Password'} copied to clipboard`);
+  };
+
   const renderPasswordItem = ({ item }: { item: PasswordEntry }) => (
     <View style={styles.passwordItem}>
       <View style={styles.passwordInfo}>
-        <Text style={styles.website}>{item.website}</Text>
-        <Text style={styles.username}>{item.username}</Text>
-        <Text style={styles.password}>{'•'.repeat(item.password.length)}</Text>
+        <View style={styles.infoRow}>
+          <Text style={styles.website}>{item.website}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.username}>{item.username}</Text>
+          <TouchableOpacity
+            style={styles.copyButton}
+            onPress={() => copyToClipboard(item.username, 'username')}
+          >
+            <Text style={styles.copyButtonText}>📋</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.password}>{'•'.repeat(item.password.length)}</Text>
+          <TouchableOpacity
+            style={styles.copyButton}
+            onPress={() => copyToClipboard(item.password, 'password')}
+          >
+            <Text style={styles.copyButtonText}>📋</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <TouchableOpacity
         style={styles.deleteButton}
@@ -134,20 +157,36 @@ const styles = StyleSheet.create({
   passwordInfo: {
     flex: 1,
   },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
   website: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 4,
   },
   username: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 4,
+    flex: 1,
   },
   password: {
     fontSize: 14,
     color: '#999',
+    flex: 1,
+  },
+  copyButton: {
+    backgroundColor: '#f0f0f0',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginLeft: 8,
+  },
+  copyButtonText: {
+    fontSize: 12,
   },
   deleteButton: {
     backgroundColor: '#ff4444',
