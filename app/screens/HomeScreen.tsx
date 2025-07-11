@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AppIcon from '../components/AppIcon';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -27,7 +28,13 @@ export default function HomeScreen() {
 
       <View style={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.logoEmoji}>🔐</Text>
+          <AppIcon 
+            size={80} 
+            showBackground={true}
+            backgroundColor="#fff"
+            iconColor="#4a90e2"
+            style={{ marginBottom: 20 }}
+          />
           <Text style={styles.title}>Password Manager</Text>
           <Text style={styles.subtitle}>Your secure digital vault</Text>
         </View>
@@ -83,10 +90,6 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 60,
-  },
-  logoEmoji: {
-    fontSize: 80,
-    marginBottom: 20,
   },
   title: { 
     fontSize: 32, 
