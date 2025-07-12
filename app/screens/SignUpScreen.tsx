@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { saveMasterPassword } from '../../utils/storage';
+import AppIcon from '../components/AppIcon';
 
 export default function SignUpScreen() {
   const [password, setPassword] = useState('');
@@ -69,7 +70,11 @@ export default function SignUpScreen() {
           },
         ]}
       >
-        <Text style={styles.logoEmoji}>🔐</Text>
+        <AppIcon 
+          size={80} 
+          showBackground={false}
+          style={{ marginBottom: 16 }}
+        />
         <Text style={styles.title}>Create Account</Text>
         <Text style={styles.subtitle}>Set up your master password</Text>
       </Animated.View>
@@ -133,11 +138,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-  },
-  logoEmoji: {
-    fontSize: 60,
-    marginBottom: 16,
-    textAlign: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 32,

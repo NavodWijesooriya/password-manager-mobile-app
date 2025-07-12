@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, StyleSheet, Text } from 'react-native';
+import AppIcon from './AppIcon';
 
 export default function LoadingAnimation({ onComplete }: { onComplete: () => void }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -50,13 +51,16 @@ export default function LoadingAnimation({ onComplete }: { onComplete: () => voi
       >
         <Animated.View
           style={[
-            styles.logo,
             {
               transform: [{ rotate: spin }],
             },
           ]}
         >
-          <Text style={styles.logoText}>🔐</Text>
+          <AppIcon
+            size={100}
+            backgroundColor="rgba(255, 255, 255, 0.2)"
+            iconColor="#fff"
+          />
         </Animated.View>
         <Text style={styles.appName}>Password Manager</Text>
         <Text style={styles.subtitle}>Secure • Simple • Smart</Text>
@@ -75,23 +79,12 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
   },
-  logo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  logoText: {
-    fontSize: 50,
-  },
   appName: {
     fontSize: 32,
     fontWeight: 'bold',
     color: '#fff',
     marginBottom: 8,
+    marginTop: 20,
   },
   subtitle: {
     fontSize: 16,
@@ -99,3 +92,10 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
 });
+//   },
+//   subtitle: {
+//     fontSize: 16,
+//     color: '#e6f2ff',
+//     opacity: 0.9,
+//   },
+// });

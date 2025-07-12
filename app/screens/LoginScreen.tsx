@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getMasterPassword, saveMasterPassword, checkMasterPassword } from '../../utils/storage';
+import AppIcon from '../components/AppIcon';
 
 export default function LoginScreen() {
   const [password, setPassword] = useState('');
@@ -65,7 +66,11 @@ export default function LoginScreen() {
           },
         ]}
       >
-        <Text style={styles.logoEmoji}>🔐</Text>
+        <AppIcon 
+          size={80} 
+          showBackground={false}
+          style={{ marginBottom: 16 }}
+        />
         <Text style={styles.title}>Password Manager</Text>
         <Text style={styles.subtitle}>
           {isFirstTime ? 'Set your master password' : 'Enter your master password'}
@@ -121,6 +126,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+    alignItems: 'center',
   },
   title: {
     fontSize: 32,
@@ -167,9 +173,5 @@ const styles = StyleSheet.create({
     color: '#4a90e2',
     fontSize: 16,
     fontWeight: '600',
-  },
-  logoEmoji: {
-    fontSize: 60,
-    marginBottom: 16,
   },
 });
