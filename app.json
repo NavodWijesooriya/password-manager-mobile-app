@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "PWD-Manager",
-    "slug": "PWD-Manager",
+    "slug": "password-manager-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/password-manager.png",
+        "foregroundImage": "./assets/key.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
