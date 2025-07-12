@@ -42,11 +42,17 @@ export default function PasswordListScreen() {
   const renderPasswordItem = ({ item }: { item: PasswordEntry }) => (
     <View style={styles.passwordItem}>
       <View style={styles.passwordInfo}>
-        <View style={styles.infoRow}>
+        <View style={styles.websiteRow}>
+          <View style={styles.websiteIcon}>
+            <Text style={styles.websiteIconText}>🌐</Text>
+          </View>
           <Text style={styles.website}>{item.website}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.username}>{item.username}</Text>
+          <View style={styles.labelContainer}>
+            <Text style={styles.label}>👤 Username</Text>
+            <Text style={styles.username}>{item.username}</Text>
+          </View>
           <TouchableOpacity
             style={styles.copyButton}
             onPress={() => copyToClipboard(item.username, 'username')}
@@ -55,7 +61,10 @@ export default function PasswordListScreen() {
           </TouchableOpacity>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.password}>{'•'.repeat(item.password.length)}</Text>
+          <View style={styles.labelContainer}>
+            <Text style={styles.label}>🔒 Password</Text>
+            <Text style={styles.password}>{'•'.repeat(item.password.length)}</Text>
+          </View>
           <TouchableOpacity
             style={styles.copyButton}
             onPress={() => copyToClipboard(item.password, 'password')}
@@ -68,21 +77,20 @@ export default function PasswordListScreen() {
         style={styles.deleteButton}
         onPress={() => handleDelete(item.id, item.website)}
       >
-        <Text style={styles.deleteButtonText}>Delete</Text>
+        <Text style={styles.deleteButtonText}>🗑️</Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity 
-        style={styles.backButton} 
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={styles.backButtonText}>← Back</Text>
-      </TouchableOpacity>
-
       <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backButtonText}>← Back</Text>
+        </TouchableOpacity>
         <Text style={styles.title}>Saved Passwords</Text>
         <TouchableOpacity
           style={styles.addButton}
@@ -126,6 +134,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
+    flex: 1,
+    textAlign: 'center',
   },
   addButton: {
     backgroundColor: '#fff',
@@ -142,61 +152,103 @@ const styles = StyleSheet.create({
   },
   passwordItem: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    marginHorizontal: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    borderLeftWidth: 4,
+    borderLeftColor: '#4a90e2',
   },
   passwordInfo: {
     flex: 1,
+    marginRight: 12,
+  },
+  websiteRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  websiteIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#f8f9fa',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  websiteIconText: {
+    fontSize: 18,
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 12,
+  },
+  labelContainer: {
+    flex: 1,
+  },
+  label: {
+    fontSize: 12,
+    color: '#8e8e93',
+    fontWeight: '500',
     marginBottom: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   website: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1d1d1f',
+    letterSpacing: 0.3,
   },
   username: {
-    fontSize: 14,
-    color: '#666',
-    flex: 1,
+    fontSize: 15,
+    color: '#3a3a3c',
+    fontWeight: '500',
   },
   password: {
-    fontSize: 14,
-    color: '#999',
-    flex: 1,
+    fontSize: 15,
+    color: '#8e8e93',
+    fontWeight: '500',
+    letterSpacing: 2,
   },
   copyButton: {
-    backgroundColor: '#f0f0f0',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    marginLeft: 8,
-  },
-  copyButtonText: {
-    fontSize: 12,
-  },
-  deleteButton: {
-    backgroundColor: '#ff4444',
+    backgroundColor: '#f2f2f7',
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: 10,
+    marginLeft: 12,
+    borderWidth: 1,
+    borderColor: '#e5e5ea',
+  },
+  copyButtonText: {
+    fontSize: 16,
+  },
+  deleteButton: {
+    backgroundColor: '#ff3b30',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#ff3b30',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   deleteButtonText: {
-    color: '#fff',
-    fontWeight: '600',
+    fontSize: 18,
   },
   emptyState: {
     flex: 1,
@@ -208,17 +260,13 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 1,
-    padding: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 8,
   },
   backButtonText: {
     fontSize: 16,
-    color: '#4a90e2',
+    color: '#fff',
     fontWeight: '600',
   },
 });
