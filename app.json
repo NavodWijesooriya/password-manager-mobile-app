@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "password-manager-app",
-    "slug": "password-manager-app",
+    "name": "PWD-Manager",
+    "slug": "PWD-Manager",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
